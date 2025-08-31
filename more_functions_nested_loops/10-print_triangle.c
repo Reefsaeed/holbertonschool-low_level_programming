@@ -17,12 +17,12 @@ for (i = 1; i <= size; i++)
 for (j = i; j < size; j++)
 {
 _putchar(' ');
-}       
+}
 /* Print hashes */
 for (k = 1; k <= i; k++)
 {
 _putchar('#');
-}       
+}
 _putchar('\n');
 }
 }
