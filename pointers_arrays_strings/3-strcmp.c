@@ -4,7 +4,7 @@
 * @s1: Pointer to the first string
 * @s2: Pointer to the second string
 *
-* Return: 
+* Return:
 * - 0 if strings are equal
 * - Negative value if s1 < s2
 * - Positive value if s1 > s2
