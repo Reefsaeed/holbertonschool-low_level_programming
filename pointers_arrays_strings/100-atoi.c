@@ -29,7 +29,7 @@ if (sign == 1)
 if (result > 214748364 || (result == 214748364 && (*s - '0') > 7))
 return (2147483647);
 }
-            else
+else
 {
 if (result > 214748364 || (result == 214748364 && (*s - '0') > 8))
 return (-2147483648);
@@ -43,5 +43,5 @@ break;
 }
 s++;
 }
-return (result * sign);
+return (result *sign);
 }
