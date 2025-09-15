@@ -1,15 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "dog.h"
-/* Helper function to calculate string length manually */
+/**
+* str_len - returns the length of a string
+* @s: string to measure
+*
+* Return: length of the string
+*/
 int str_len(char *s)
 {
 int len = 0;
 while (s && s[len])
 len++;
-return len;
+return (len);
 }
-/* Helper function to copy string manually */
+/**
+* str_copy - copies a string from src to dest
+* @dest: destination buffer
+* @src: source string
+*
+* Return: void
+*/
 void str_copy(char *dest, char *src)
 {
 int i = 0;
