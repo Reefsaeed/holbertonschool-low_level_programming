@@ -18,11 +18,11 @@ while (format && format[i])
 {
 current_char = format[i];
 /* First if: handle separator */
-if (printed && (current_char == 'c' || current_char == 'i' || 
+if (printed && (current_char == 'c' || current_char == 'i' ||
 current_char == 'f' || current_char == 's'))
 printf(", ");
 /* Second if: handle all valid format specifiers */
-if (current_char == 'c' || current_char == 'i' || 
+if (current_char == 'c' || current_char == 'i' ||
 current_char == 'f' || current_char == 's')
 {
 printed = 1;
