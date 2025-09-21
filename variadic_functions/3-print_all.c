@@ -25,8 +25,7 @@ if (format[i] == 's')
 {
 str = va_arg(args, char *);
 if (str == NULL)
-printf("%s(nil)", sep);
-else
+str = "(nil)";
 printf("%s%s", sep, str);
 }
 sep = ", ";
