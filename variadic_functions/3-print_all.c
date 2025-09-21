@@ -17,34 +17,32 @@ va_start(args, format);
 while (format && format[i])
 {
 current_char = format[i];
+/* First if: handle separator */
 if (printed && (current_char == 'c' || current_char == 'i' || 
 current_char == 'f' || current_char == 's'))
-{
 printf(", ");
-}
-if (current_char == 'c')
+/* Second if: handle all valid format specifiers */
+if (current_char == 'c' || current_char == 'i' || 
+current_char == 'f' || current_char == 's')
 {
+printed = 1;
+/* Handle each format specifier without additional if statements */
+switch (current_char)
+{
+case 'c':
 printf("%c", va_arg(args, int));
-printed = 1;
-}
-else if (current_char == 'i')
-{
+break;
+case 'i':
 printf("%d", va_arg(args, int));
-printed = 1;
-}
-else if (current_char == 'f')
-{
+break;
+case 'f':
 printf("%f", va_arg(args, double));
-printed = 1;
-}
-else if (current_char == 's')
-{
+break;
+case 's':
 str = va_arg(args, char *);
-if (str == NULL)
-printf("(nil)");
-else
-printf("%s", str);
-printed = 1;
+printf("%s", str ? str : "(nil)");
+break;
+}
 }
 i++;
 }
