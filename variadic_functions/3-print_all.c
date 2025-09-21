@@ -1,34 +1,51 @@
+#include "variadic_functions.h"
 #include <stdio.h>
 #include <stdarg.h>
-#include "variadic_functions.h"
 /**
-* print_all - prints anything based on the format string
-* @format: string containing types of arguments to print
-*          c = char, i = int, f = float, s = char *
+* print_all - Prints anything based on the format string
+* @format: List of types of arguments (c: char, i: int, f: float, s: char*)
+* @...: Variable arguments to print
 */
 void print_all(const char * const format, ...)
 {
 va_list args;
-unsigned int i = 0;
+int i = 0;
 char *str;
-char *sep = "";
+char current_char;
+int printed = 0;
 va_start(args, format);
-while (format != NULL && format[i] != '\0')
+while (format && format[i])
 {
-if (format[i] == 'c')
-printf("%s%c", sep, va_arg(args, int));
-if (format[i] == 'i')
-printf("%s%d", sep, va_arg(args, int));
-if (format[i] == 'f')
-printf("%s%f", sep, va_arg(args, double));
-if (format[i] == 's')
+current_char = format[i];
+if (printed && (current_char == 'c' || current_char == 'i' || 
+current_char == 'f' || current_char == 's'))
+{
+printf(", ");
+}
+if (current_char == 'c')
+{
+printf("%c", va_arg(args, int));
+printed = 1;
+}
+else if (current_char == 'i')
+{
+printf("%d", va_arg(args, int));
+printed = 1;
+}
+else if (current_char == 'f')
+{
+printf("%f", va_arg(args, double));
+printed = 1;
+}
+else if (current_char == 's')
 {
 str = va_arg(args, char *);
 if (str == NULL)
-str = "(nil)";
-printf("%s%s", sep, str);
+printf("(nil)");
+else
+printf("%s", str);
+printed = 1;
 }
-sep = ", ";
 i++;
 }
 va_end(args);
