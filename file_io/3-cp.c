@@ -25,13 +25,7 @@ dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
 exit(98);
 }
 
-/* Try reading zero bytes to detect read errors early */
-if (read(*fd_from, NULL, 0) == -1)  /* Use NULL buffer for zero-byte read */
-{
-dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
-close(*fd_from);
-exit(98);
-}
+/* REMOVE the zero-byte read test - it's consuming a read call */
 
 *fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, permissions);
 if (*fd_to == -1)
