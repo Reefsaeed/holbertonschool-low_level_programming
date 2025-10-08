@@ -17,11 +17,20 @@ void open_files(const char *file_from, const char *file_to,
 int *fd_from, int *fd_to)
 {
 mode_t permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+char buffer[1];
 
 *fd_from = open(file_from, O_RDONLY);
 if (*fd_from == -1)
 {
 dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+exit(98);
+}
+
+/* Try reading one byte to detect read errors early */
+if (read(*fd_from, buffer, 0) == -1)  /* 0 byte read for test */
+{
+dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+close(*fd_from);
 exit(98);
 }
 
