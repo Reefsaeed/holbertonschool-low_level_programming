@@ -10,8 +10,8 @@
 * open_files - opens source and destination files
 * @file_from: source filename
 * @file_to: destination filename
-* @fd_from: pointer to store source file descriptor
-* @fd_to: pointer to store destination file descriptor
+* @fd_from: pointer to store source fd
+* @fd_to: pointer to store destination fd
 */
 void open_files(const char *file_from, const char *file_to,
 int *fd_from, int *fd_to)
@@ -38,11 +38,11 @@ exit(99);
 * copy_content - copies content from source to destination
 * @fd_from: source file descriptor
 * @fd_to: destination file descriptor
-* @file_from: source filename for error messages
-* @file_to: destination filename for error messages
+* @file_from: source filename for errors
+* @file_to: destination filename for errors
 */
-void copy_content(int fd_from, int fd_to, const char *file_from,
-const char *file_to)
+void copy_content(int fd_from, int fd_to,
+const char *file_from, const char *file_to)
 {
 ssize_t bytes_read, bytes_written;
 char buffer[BUFFER_SIZE];
@@ -69,6 +69,27 @@ exit(98);
 }
 
 /**
+* close_files - closes file descriptors with error handling
+* @fd_from: source file descriptor
+* @fd_to: destination file descriptor
+*/
+void close_files(int fd_from, int fd_to)
+{
+if (close(fd_from) == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from);
+close(fd_to);
+exit(100);
+}
+
+if (close(fd_to) == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to);
+exit(100);
+}
+}
+
+/**
 * main - copies the content of a file to another file
 * @ac: argument count
 * @av: argument vector
@@ -87,19 +108,6 @@ exit(97);
 
 open_files(av[1], av[2], &fd_from, &fd_to);
 copy_content(fd_from, fd_to, av[1], av[2]);
-
-if (close(fd_from) == -1)
-{
-dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from);
-close(fd_to);
-exit(100);
-}
-
-if (close(fd_to) == -1)
-{
-dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to);
-exit(100);
-}
-
+close_files(fd_from, fd_to);
 return (0);
 }
