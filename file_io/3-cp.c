@@ -1,8 +1,8 @@
 #include "main.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define BUFFER_SIZE 1024
 
@@ -90,11 +90,10 @@ exit(100);
 }
 
 /**
-* main - copies the content of a file to another file
+* main - copies content from one file to another
 * @ac: argument count
 * @av: argument vector
-*
-* Return: 0 on success, or appropriate error code
+* Return: 0 on success
 */
 int main(int ac, char **av)
 {
@@ -109,5 +108,6 @@ exit(97);
 open_files(av[1], av[2], &fd_from, &fd_to);
 copy_content(fd_from, fd_to, av[1], av[2]);
 close_files(fd_from, fd_to);
+
 return (0);
 }
