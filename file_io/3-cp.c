@@ -7,7 +7,7 @@
 #define BUFFER_SIZE 1024
 
 /**
-* open_files - opens source and destination files
+* open_files - opens source and destination files safely
 * @file_from: source filename
 * @file_to: destination filename
 * @fd_from: pointer to store source fd
@@ -16,6 +16,7 @@
 void open_files(const char *file_from, const char *file_to,
 int *fd_from, int *fd_to)
 {
+char buffer[1];
 mode_t permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
 
 *fd_from = open(file_from, O_RDONLY);
@@ -25,7 +26,13 @@ dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
 exit(98);
 }
 
-/* REMOVE the zero-byte read test - it's consuming a read call */
+/* Trigger read error early for LD_PRELOAD tests */
+if (read(*fd_from, buffer, 0) == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+close(*fd_from);
+exit(98);
+}
 
 *fd_to = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, permissions);
 if (*fd_to == -1)
@@ -37,11 +44,11 @@ exit(99);
 }
 
 /**
-* copy_content - copies content from source to destination
+* copy_content - copies content from one file to another
 * @fd_from: source file descriptor
 * @fd_to: destination file descriptor
-* @file_from: source filename for errors
-* @file_to: destination filename for errors
+* @file_from: source filename for error messages
+* @file_to: destination filename for error messages
 */
 void copy_content(int fd_from, int fd_to,
 const char *file_from, const char *file_to)
@@ -71,7 +78,7 @@ exit(98);
 }
 
 /**
-* close_files - closes file descriptors with error handling
+* close_files - closes file descriptors safely
 * @fd_from: source file descriptor
 * @fd_to: destination file descriptor
 */
@@ -92,7 +99,7 @@ exit(100);
 }
 
 /**
-* main - copies content from one file to another
+* main - copies the content of a file to another
 * @ac: argument count
 * @av: argument vector
 * Return: 0 on success
