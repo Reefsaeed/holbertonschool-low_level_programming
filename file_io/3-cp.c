@@ -45,20 +45,30 @@ exit(code);
 */
 void close_fd(int fd)
 {
-int ret;
-char fd_str[12];
-int i = 0, temp = fd;
+int ret, i = 0, temp = fd, j;
+char fd_str[12], c;
 
 ret = close(fd);
 if (ret == -1)
+{
+write(STDERR_FILENO, "Error: Can't close fd ", 22);
+if (temp == 0)
+write(STDERR_FILENO, "0", 1);
+else
 {
 while (temp > 0)
 {
 fd_str[i++] = (temp % 10) + '0';
 temp /= 10;
 }
-fd_str[i] = '\0';
-print_error_exit(100, "Error: Can't close fd ", fd_str, 1);
+for (j = i - 1; j >= 0; j--)
+{
+c = fd_str[j];
+write(STDERR_FILENO, &c, 1);
+}
+}
+write(STDERR_FILENO, "\n", 1);
+exit(100);
 }
 }
 
