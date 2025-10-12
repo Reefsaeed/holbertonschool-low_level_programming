@@ -100,13 +100,13 @@ while (1)
 read_bytes = read(fd_from, buffer, BUFFER_SIZE);
 if (read_bytes == 0)
 break;
-if (read_bytes == -1)
+if (read_bytes < 0)
 {
 print_error_exit(98, "Error: Can't read from file ", argv[1], 0);
 }
 
 write_bytes = write(fd_to, buffer, read_bytes);
-if (write_bytes == -1 || write_bytes != read_bytes)
+if (write_bytes < 0 || write_bytes != read_bytes)
 {
 print_error_exit(99, "Error: Can't write to ", argv[2], 0);
 }
