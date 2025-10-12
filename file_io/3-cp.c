@@ -9,8 +9,7 @@
 */
 void print_error_exit(int code, char *msg1, char *msg2, int is_num)
 {
-int i, n;
-char c;
+int i;
 
 for (i = 0; msg1[i]; i++)
 ;
@@ -18,16 +17,9 @@ write(STDERR_FILENO, msg1, i);
 
 if (is_num)
 {
-n = 0;
 for (i = 0; msg2[i]; i++)
-n = n * 10 + (msg2[i] - '0');
-if (n / 10)
-{
-c = (n / 10) + '0';
-write(STDERR_FILENO, &c, 1);
-}
-c = (n % 10) + '0';
-write(STDERR_FILENO, &c, 1);
+;
+write(STDERR_FILENO, msg2, i);
 }
 else
 {
@@ -103,8 +95,18 @@ void copy_content(int fd_from, int fd_to, char *argv[])
 char buffer[BUFFER_SIZE];
 int read_bytes, write_bytes;
 
-while ((read_bytes = read(fd_from, buffer, BUFFER_SIZE)) > 0)
+while (1)
 {
+read_bytes = read(fd_from, buffer, BUFFER_SIZE);
+if (read_bytes == -1)
+{
+close_fd(fd_from);
+close_fd(fd_to);
+print_error_exit(98, "Error: Can't read from file ", argv[1], 0);
+}
+if (read_bytes == 0)
+break;
+
 write_bytes = write(fd_to, buffer, read_bytes);
 if (write_bytes == -1 || write_bytes != read_bytes)
 {
@@ -112,13 +114,6 @@ close_fd(fd_from);
 close_fd(fd_to);
 print_error_exit(99, "Error: Can't write to ", argv[2], 0);
 }
-}
-
-if (read_bytes == -1)
-{
-close_fd(fd_from);
-close_fd(fd_to);
-print_error_exit(98, "Error: Can't read from file ", argv[1], 0);
 }
 }
 
