@@ -98,20 +98,16 @@ int read_bytes, write_bytes;
 while (1)
 {
 read_bytes = read(fd_from, buffer, BUFFER_SIZE);
-if (read_bytes == -1)
-{
-close_fd(fd_from);
-close_fd(fd_to);
-print_error_exit(98, "Error: Can't read from file ", argv[1], 0);
-}
 if (read_bytes == 0)
 break;
+if (read_bytes == -1)
+{
+print_error_exit(98, "Error: Can't read from file ", argv[1], 0);
+}
 
 write_bytes = write(fd_to, buffer, read_bytes);
 if (write_bytes == -1 || write_bytes != read_bytes)
 {
-close_fd(fd_from);
-close_fd(fd_to);
 print_error_exit(99, "Error: Can't write to ", argv[2], 0);
 }
 }
