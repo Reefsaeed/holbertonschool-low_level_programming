@@ -1,21 +1,21 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 
-ssize_t read_textfile(const char *filename, size_t letters);
-int create_file(const char *filename, char *text_content);
-int append_text_to_file(const char *filename, char *text_content);
+#define BUFFER_SIZE 1024
 
-void open_files(const char *file_from, const char *file_to,
-int *fd_from, int *fd_to);
-void copy_content(int fd_from, int fd_to,
-const char *file_from, const char *file_to);
-void close_files(int fd_from, int fd_to);
+/* _putchar function */
+int _putchar(char c);
+
+/* Custom string printing function for errors */
+void print_error(char *message);
+
+/* CP function */
+int main(int argc, char *argv[]);
 
 #endif /* MAIN_H */
